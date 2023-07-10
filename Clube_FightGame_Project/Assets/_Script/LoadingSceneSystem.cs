@@ -10,8 +10,7 @@ public class LoadingSceneSystem : MonoBehaviour
     static string nextScene;
 
     //로딩바 이미지
-    [SerializeField]
-    Image progressImage;
+    [SerializeField] Image progressImage;
 
     //로드씬 함수
     public static void LoadScene(string sceneName)
