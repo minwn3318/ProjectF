@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GoToScene : MonoBehaviour
+public class MoveSceneSystem : MonoBehaviour
 {
     //버튼 오브젝트 변수
     private Button singlebutton;
