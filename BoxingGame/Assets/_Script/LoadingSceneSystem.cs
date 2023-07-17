@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -25,6 +27,8 @@ public class LoadingSceneSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //로딩씬이 시작되었을 때, 무작위의 게임 팁 로그 출력하기
+        LoadXml();
         //로딩씬이 시작되었을 때, 로딩 코루틴 부르기
         StartCoroutine(LoadSceneProgress());
     }
@@ -65,5 +69,19 @@ public class LoadingSceneSystem : MonoBehaviour
                 }
             }
         }
+    }
+
+    //로딩 시 출력되는 텍스트 xml파일 로드하기
+    private void LoadXml()
+    {
+        TextAsset textAsset = (TextAsset)Resources.Load("LoadingTxt");
+        Debug.Log(textAsset);
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.LoadXml(textAsset.text);
+
+        XmlNodeList nodes = xmlDoc.SelectNodes("LoadingLog/tip/log");
+
+        string text = nodes[Random.Range(0, nodes.Count)].InnerText;
+        Debug.Log(text);
     }
 }
