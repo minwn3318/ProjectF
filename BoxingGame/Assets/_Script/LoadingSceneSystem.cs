@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+using TMPro;
 using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,6 +11,9 @@ public class LoadingSceneSystem : MonoBehaviour
 {
     //이동한 씬이름
     static string nextScene;
+
+    //로딩시 출력될 로그
+    [SerializeField] TextMeshProUGUI logCountents;
 
     //로딩바 이미지
     [SerializeField] Image progressImage;
@@ -74,14 +78,19 @@ public class LoadingSceneSystem : MonoBehaviour
     //로딩 시 출력되는 텍스트 xml파일 로드하기
     private void LoadXml()
     {
+        //리소스 파일에서 LoadingTxt라는 이름의 파일 로드하고 Text변수에 저장하기
         TextAsset textAsset = (TextAsset)Resources.Load("LoadingTxt");
-        Debug.Log(textAsset);
-        XmlDocument xmlDoc = new XmlDocument();
-        xmlDoc.LoadXml(textAsset.text);
 
+        //xml객체 선언하기
+        XmlDocument xmlDoc = new XmlDocument();
+
+        //xml의 내용 중 tip태그에 log속성 리스트 저장하기
         XmlNodeList nodes = xmlDoc.SelectNodes("LoadingLog/tip/log");
 
+        //log속성 중 무작위로 뽑아서 스트링 변수에 저장하기
         string text = nodes[Random.Range(0, nodes.Count)].InnerText;
-        Debug.Log(text);
+
+        //text ui에 스트링 변수 내용 저장하기
+        logCountents.text = text;
     }
 }
