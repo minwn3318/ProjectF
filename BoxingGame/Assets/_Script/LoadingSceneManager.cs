@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LoadingSceneSystem : MonoBehaviour
+public class LoadingSceneManager : MonoBehaviour
 {
     //이동한 씬이름
     static string nextScene;
