@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LoadingSceneSystem : MonoBehaviour
+public class LoadingSceneManager : MonoBehaviour
 {
     //이동한 씬이름
     static string nextScene;
@@ -83,6 +83,9 @@ public class LoadingSceneSystem : MonoBehaviour
 
         //xml객체 선언하기
         XmlDocument xmlDoc = new XmlDocument();
+
+        //xml객체에 xml 저장하기
+        xmlDoc.LoadXml(textAsset.text);
 
         //xml의 내용 중 tip태그에 log속성 리스트 저장하기
         XmlNodeList nodes = xmlDoc.SelectNodes("LoadingLog/tip/log");
