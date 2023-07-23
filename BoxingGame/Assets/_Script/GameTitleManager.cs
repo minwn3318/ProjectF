@@ -15,7 +15,7 @@ public class GameTitleManager : MonoBehaviour
     private Button quitOption;
 
     // 씬 시작시 버튼 컴포넌트 설정하기
-    void Start()
+    public void Awake()
     {
         //싱글플레이 버튼 컴포넌트 찾기
         singlebutton = transform.Find("SinglePlay").GetComponent<Button>();

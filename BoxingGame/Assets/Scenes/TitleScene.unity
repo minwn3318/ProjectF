@@ -939,7 +939,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 773466643db07674a9fa5e507b2aefa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bgSound: {fileID: 943238353}
   bgList:
   - {fileID: 8300000, guid: 655ef95b19bd8734ba9d446c8d8fccd5, type: 3}
 --- !u!4 &943238352
@@ -2734,7 +2733,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 0.5
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

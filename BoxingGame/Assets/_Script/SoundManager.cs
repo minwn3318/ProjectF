@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SoundManager : MonoBehaviour
 {
@@ -27,6 +28,11 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    private AudioSource bgSound;
+    public AudioClip[] bgList;
+
+    private Slider bgSlider;
+
     private void Awake()
     {
         var objs = FindObjectsOfType<SoundManager>();
@@ -37,11 +43,14 @@ public class SoundManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
 
+        bgSound = GetComponent<AudioSource>();
+        
+        Debug.Log(bgSlider);
+
+        //bgSlider.onValueChanged.AddListener(ChangeVolume);
+
         PlayingBackgroundSound(bgList[0]);
     }
-
-    public AudioSource bgSound;
-    public AudioClip[] bgList; 
 
     public void PlayingBackgroundSound(AudioClip clip)
     {
@@ -49,5 +58,10 @@ public class SoundManager : MonoBehaviour
         bgSound.loop = true;
         bgSound.volume = 0.1f;
         bgSound.Play();
+    }
+
+    public void ChangeVolume(float bgmVoloume)
+    {
+        bgSound.volume = bgmVoloume;
     }
 }
