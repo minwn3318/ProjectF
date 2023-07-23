@@ -31,7 +31,7 @@ public class SoundManager : MonoBehaviour
     private AudioSource bgSound;
     public AudioClip[] bgList;
 
-    private Slider bgSlider;
+    GameTitleManager gameTitleManager;
 
     private void Awake()
     {
@@ -44,10 +44,6 @@ public class SoundManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         bgSound = GetComponent<AudioSource>();
-        
-        Debug.Log(bgSlider);
-
-        //bgSlider.onValueChanged.AddListener(ChangeVolume);
 
         PlayingBackgroundSound(bgList[0]);
     }

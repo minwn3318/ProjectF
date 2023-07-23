@@ -13,6 +13,9 @@ public class GameTitleManager : MonoBehaviour
     private Transform optionWindow;
     //옵션창 나가기 버튼 오브젝트 변수
     private Button quitOption;
+    //볼륨 슬라이더 오브젝트 변수
+    public Slider volumeSlider;
+
 
     // 씬 시작시 버튼 컴포넌트 설정하기
     public void Awake()
@@ -26,6 +29,9 @@ public class GameTitleManager : MonoBehaviour
         optionWindow = option.transform.Find("Option Window");
         //옵션창을 통해 옵션 나가기 버튼 컴포넌트 찾기
         quitOption = optionWindow.transform.Find("Quit Option").GetComponent<Button>();
+        //옵션창을 통해 볼륨 슬라이더 컴포넌트 찾기
+        volumeSlider = optionWindow.transform.Find("Volume Slider").GetComponent<Slider>();
+        Debug.Log(volumeSlider);
 
         //옵션창 비활성화
         optionWindow.gameObject.SetActive(false);
