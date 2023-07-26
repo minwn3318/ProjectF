@@ -36,6 +36,8 @@ public class SoundManager : MonoBehaviour
             return;
         }
         DontDestroyOnLoad(gameObject);
+
+        PlayingBackgroundSound(bgList[0]);
     }
 
     public AudioSource bgSound;
