@@ -598,6 +598,10 @@ PrefabInstance:
       propertyPath: m_WarningMessage
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6545793038043945449, guid: 79f0408f47e625140a5a3bafe3485fb6, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79f0408f47e625140a5a3bafe3485fb6, type: 3}
 --- !u!1 &6252122305897193715 stripped
@@ -617,7 +621,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf95bad330bbd0044a431d9a0f339a03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
+  speed: 6
   turnSmoothTime: 0.1
   attackCombo: 0
 --- !u!54 &6252122305897193721
