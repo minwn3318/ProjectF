@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5ca541ff0b8b21a4f83d94d14f26e18a
+guid: 7cb40b3a0bf8a1c41aee3839d10be88d
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
@@ -17,7 +17,17 @@ ModelImporter:
     removeConstantScaleCurves: 1
     motionNodeName: 
     rigImportErrors: 
-    rigImportWarnings: 
+    rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
+      copied configuration does not match position in animation file:\n\t'L_UpperLeg'
+      : position error = 183.397324 mm\n\t'L_LowerLeg' : position error = 58.322380
+      mm\n\t'L_Foot' : position error = 102.417709 mm\n\t'R_UpperLeg' : position
+      error = 183.397400 mm\n\t'R_LowerLeg' : position error = 58.322456 mm\n\t'R_Foot'
+      : position error = 102.412987 mm\n\t'Spine' : position error = 17.948000 mm\n\t'Chest'
+      : position error = 7.068966 mm\n\t'Neck' : position error = 38.324619 mm\n\t'Head'
+      : position error = 217.620255 mm\n\t'L_UpperArm' : position error = 71.203362
+      mm\n\t'L_LowerArm' : position error = 1.935731 mm\n\t'L_Palm' : position error
+      = 33.435265 mm\n\t'R_UpperArm' : position error = 71.203346 mm\n\t'R_LowerArm'
+      : position error = 1.935915 mm\n\t'R_Palm' : position error = 33.435081 mm\n"
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -31,7 +41,36 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: mixamo.com
+      takeName: mixamo.com
+      internalID: -203655887218126122
+      firstFrame: 0
+      lastFrame: 80
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []
