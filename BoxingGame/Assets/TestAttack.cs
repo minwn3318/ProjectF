@@ -18,25 +18,5 @@ public class TestAttack : MonoBehaviour
     {
         
     }
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            PlayerController controller = collision.gameObject.GetComponent<PlayerController>();
 
-            if (controller.AttackCheck())
-            {
-                Debug.Log("collide!!");
-                defaultMaterial.material = test2;
-            }
-        }
-    }
-    private void OnCollisionExit(Collision collision)
-    {
-
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            defaultMaterial.material = test1;
-        }
-    }
 }
