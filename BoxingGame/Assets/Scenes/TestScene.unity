@@ -405,6 +405,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Horse_01
       objectReference: {fileID: 0}
+    - target: {fileID: 4514325828905519590, guid: 34e7a205a8ed5304fb8fda8c62948b5a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7137615059542690086, guid: 34e7a205a8ed5304fb8fda8c62948b5a, type: 3}
       propertyPath: m_Controller
       value: 
