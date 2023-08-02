@@ -252,7 +252,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: c065d0f7b30d3f14cb5831b7f94ebe2e, type: 2}
+  m_Motion: {fileID: 7400000, guid: ed843c02d84cb2d4fb05d6ed38064b3a, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -396,7 +396,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BoxingAnimator
+  m_Name: DualWieldAnimator
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Attack_A_1
@@ -688,7 +688,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 785a536c51827a34f8dbf64b43b58787, type: 2}
+  m_Motion: {fileID: 7400000, guid: d3bb9e15a6c43dd4197be30a3a8ab484, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -918,7 +918,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 1827226128182048838, guid: e204ab07be2ef544d8834ccbd630361d, type: 3}
+  m_Motion: {fileID: 1827226128182048838, guid: cec0f767eb64e3e4c95e79e38db4656b, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
