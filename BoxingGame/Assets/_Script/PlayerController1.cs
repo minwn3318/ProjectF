@@ -6,9 +6,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerController1 : MonoBehaviour
 {
+    //플레이어컨트롤러 인스턴스 선언
     public static PlayerController1 Instance { get; private set; }
 
-
+    //플레이어컨트롤러 싱글톤패턴 구현
     void Awake()
     {
         if (null == Instance)
@@ -19,25 +20,44 @@ public class PlayerController1 : MonoBehaviour
         }
         Destroy(gameObject);
     }
+
+    //애니메이션 컨트롤러 변수 선언
     Animator animator;
+
+    //이동관련 평면벡터 변수 선언
     Vector2 input;
+    //이동 중 회전관련 삼차원벡터 변수 선언
     Vector3 moveVec;
+
+    //이동속력 변수 선언
     [SerializeField] float speed;
+    //회전시간 변수 선언
     public float turnSmoothTime = 0.1f;
+    //회전속력 변수 선언
     private float turnSmoothVelocity;
+
+    //움직임 판정 부울 변수 선언
     private bool isMove;
+    //공격 콤보 변수 선언
     public int attackCombo = 0;
+    //공격중 판정 부울 변수 선언
     public bool isAttack;
+    //공격 가능 판정 부울 변수 선언
     public bool canAttack;
 
+    //공격 쿨타임 변수 선언
     public float cooldownTime = 2f;
     private float nextFireTime = 0f;
+
+    //클릭 횟수 스테틱 변수 선언
     public static int noOfClicks = 0;
+    //마지막 클릭 시간 저장 변수 선언
     float lastClickedTime = 0;
+    //콤보 딜레이 변수 선언
     float maxComboDelay = 1f;
-
-
+    //데미지 변수 선언
     public float damage;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -75,7 +95,8 @@ public class PlayerController1 : MonoBehaviour
     }
     public void OnAttackAButton(InputAction.CallbackContext context)
     {
-        if(canAttack)
+        noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
+        if (canAttack)
         {
             lastClickedTime = Time.time;
             noOfClicks++;
@@ -85,7 +106,7 @@ public class PlayerController1 : MonoBehaviour
                 animator.SetBool("Attack_A_1", true);
                 isAttack = true;
             }
-            noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
+
             if (noOfClicks >= 2 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && (animator.GetCurrentAnimatorStateInfo(0).IsName("A") || animator.GetCurrentAnimatorStateInfo(0).IsName("S")))
             {
                 animator.SetBool("Attack_A_1", false);
@@ -101,11 +122,8 @@ public class PlayerController1 : MonoBehaviour
                 animator.SetBool("Attack_S_2", false);
                 animator.SetBool("Attack_A_3", true);
                 isAttack = true;
-
-
             }
         }
-      
     }
     public void OnAttackSButton(InputAction.CallbackContext context)
     {

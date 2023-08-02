@@ -531,27 +531,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79f0408f47e625140a5a3bafe3485fb6, type: 3}
---- !u!1 &7768471687922841921 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 539491247289014569, guid: 79f0408f47e625140a5a3bafe3485fb6, type: 3}
-  m_PrefabInstance: {fileID: 7768471687922841920}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7768471687922841922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7768471687922841921}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5991acac6c146bc42a7e5d7a29a428cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 5
-  turnSmoothTime: 0.1
-  attackCombo: 0
-  isAttack: 0
-  canAttack: 0
-  cooldownTime: 2
-  damage: 0
