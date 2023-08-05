@@ -38,19 +38,23 @@ public class PlayerController1 : MonoBehaviour
 
     //움직임 판정 부울 변수 선언
     private bool isMove;
-    //공격 콤보 변수 선언
-    public int attackCombo = 0;
-    //공격중 판정 부울 변수 선언
-    public bool isAttack;
-    //공격 가능 판정 부울 변수 선언
-    public bool canAttack;
+	//공격중 판정 부울 변수 선언
+	public bool isAttack;
+	//공격 가능 판정 부울 변수 선언
+	public bool canAttack;
 
+	//공격 콤보 변수 선언
+	public int attackCombo = 0;
+    //공격애니메이션 시작 시간 변수 선언
+    //public float startAttakeTime;
     //공격 쿨타임 변수 선언
     public float cooldownTime = 2f;
+
     private float nextFireTime = 0f;
 
     //클릭 횟수 스테틱 변수 선언
     public static int noOfClicks = 0;
+
     //마지막 클릭 시간 저장 변수 선언
     float lastClickedTime = 0;
     //콤보 딜레이 변수 선언
@@ -100,6 +104,21 @@ public class PlayerController1 : MonoBehaviour
         {
             lastClickedTime = Time.time;
             noOfClicks++;
+            //switch (noOfClicks)
+            //{
+            //    case 1:
+            //        {
+            //            animator.SetBool("attack_a_1", true);
+            //            isAttack = true;
+            //            break;
+            //        }
+            //    case 2:
+            //        {
+                        
+            //            break;
+            //        }
+
+            //}
 
             if (noOfClicks == 1)
             {
