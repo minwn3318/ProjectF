@@ -102,7 +102,6 @@ public class PlayerController1 : MonoBehaviour
         noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
         if (canAttack)
         {
-            lastClickedTime = Time.time;
             noOfClicks++;
             //switch (noOfClicks)
             //{
@@ -124,15 +123,23 @@ public class PlayerController1 : MonoBehaviour
             {
                 animator.SetBool("Attack_A_1", true);
                 isAttack = true;
+                canAttack = false;
+                if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
+                {
+                    canAttack = true;
+                }
             }
 
-            if (noOfClicks >= 2 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && (animator.GetCurrentAnimatorStateInfo(0).IsName("A") || animator.GetCurrentAnimatorStateInfo(0).IsName("S")))
+            if (noOfClicks >= 2 && animator.GetCurrentAnimatorStateInfo(0).IsName("A"))
             {
                 animator.SetBool("Attack_A_1", false);
-                animator.SetBool("Attack_S_1", false);
                 animator.SetBool("Attack_A_2", true);
-
                 isAttack = true;
+                canAttack = false;
+                if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
+                {
+                    canAttack = true;
+                }
             }
 
             if (noOfClicks >= 3 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && (animator.GetCurrentAnimatorStateInfo(0).IsName("OA") || animator.GetCurrentAnimatorStateInfo(0).IsName("OS")))
@@ -148,20 +155,28 @@ public class PlayerController1 : MonoBehaviour
     {
         if(canAttack)
         {
-            lastClickedTime = Time.time;
             noOfClicks++;
             if (noOfClicks == 1)
             {
                 animator.SetBool("Attack_S_1", true);
                 isAttack = true;
+                canAttack = false;
+                if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
+                {
+                    canAttack = true;
+                }
             }
             noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
-            if (noOfClicks >= 2 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && (animator.GetCurrentAnimatorStateInfo(0).IsName("A") || animator.GetCurrentAnimatorStateInfo(0).IsName("S")))
+            if (noOfClicks >= 2 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.8f && animator.GetCurrentAnimatorStateInfo(0).IsName("S"))
             {
-                animator.SetBool("Attack_A_1", false);
                 animator.SetBool("Attack_S_1", false);
                 animator.SetBool("Attack_S_2", true);
                 isAttack = true;
+                canAttack= false;
+                if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
+                {
+                    canAttack = true;
+                }
             }
 
            if (noOfClicks >= 3 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && (animator.GetCurrentAnimatorStateInfo(0).IsName("OA") || animator.GetCurrentAnimatorStateInfo(0).IsName("OS")))
@@ -215,7 +230,9 @@ public class PlayerController1 : MonoBehaviour
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
             attackCombo = 0;
+            noOfClicks = 0;
             isAttack = false;
+            canAttack = true;
             CapsuleCollider collider = gameObject.GetComponent<CapsuleCollider>();
             collider.radius = 0.4f;
             collider.center = new Vector3(0, 1, 0f);
