@@ -35,40 +35,34 @@ public class PlayerController1 : MonoBehaviour
     public float turnSmoothTime = 0.1f;
     //회전속력 변수 선언
     private float turnSmoothVelocity;
-
     //움직임 판정 부울 변수 선언
     private bool isMove;
-	//공격중 판정 부울 변수 선언
-	public bool isAttack;
-	//공격 가능 판정 부울 변수 선언
-	public bool canAttack;
+
+    //공격중 판정 부울 변수 선언
+    public bool isAttack = false;
+    //콤보가능 판정 부울 변수 선언
+    public bool canCombo = false;
 
 	//공격 콤보 변수 선언
 	public int attackCombo = 0;
-    //공격애니메이션 시작 시간 변수 선언
-    //public float startAttakeTime;
-    //공격 쿨타임 변수 선언
-    public float cooldownTime = 2f;
-
-    private float nextFireTime = 0f;
-
     //클릭 횟수 스테틱 변수 선언
     public static int noOfClicks = 0;
 
     //마지막 클릭 시간 저장 변수 선언
-    float lastClickedTime = 0;
+    //float lastClickedTime;
     //콤보 딜레이 변수 선언
-    float maxComboDelay = 1f;
+    //float maxComboDelay = 1f;
     //데미지 변수 선언
     public float damage;
 
     void Start()
     {
         animator = GetComponent<Animator>();
+        noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
     }
     private void FixedUpdate()
     {
-        Attack();
+        Idle();
     }
     void Update()
     {
@@ -91,154 +85,123 @@ public class PlayerController1 : MonoBehaviour
 
             animator.SetBool("IsRun", isMove);
         }
-        
     }
+
+    public void Idle()
+    {
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        {
+            if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.2f)
+            {
+                attackCombo = 0;
+                noOfClicks = 0;
+                isAttack = false;
+                canCombo = false;
+                //Debug.Log("combo : " + canCombo);
+                CapsuleCollider collider = gameObject.GetComponent<CapsuleCollider>();
+                collider.radius = 0.4f;
+                collider.center = new Vector3(0, 1, 0f);
+            }
+        }
+
+        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
+        {
+            if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.8f)
+            {
+                canCombo = true;
+            }
+        }
+    }
+
     public void OnMove(InputAction.CallbackContext context)
     {
         input = context.ReadValue<Vector2>();
     }
     public void OnAttackAButton(InputAction.CallbackContext context)
     {
-        noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
-        if (canAttack)
+        noOfClicks++;
+        Debug.Log(noOfClicks);
+        if(noOfClicks == 1)
         {
-            noOfClicks++;
-            //switch (noOfClicks)
-            //{
-            //    case 1:
-            //        {
-            //            animator.SetBool("attack_a_1", true);
-            //            isAttack = true;
-            //            break;
-            //        }
-            //    case 2:
-            //        {
-                        
-            //            break;
-            //        }
+            animator.SetTrigger("Attack_A");
+            //Debug.Log("Attack A");
+            isAttack = true;
+        }
 
-            //}
-
-            if (noOfClicks == 1)
+        else
+        {
+            if(canCombo)
             {
-                animator.SetBool("Attack_A_1", true);
-                isAttack = true;
-                canAttack = false;
-                if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
+                switch(noOfClicks)
                 {
-                    canAttack = true;
+                    case 2:
+                        animator.SetTrigger("Attack_AA");
+                        //Debug.Log("Attack AA");
+                        break;
+                    case 3:
+                        if(animator.GetCurrentAnimatorStateInfo(0).IsName("OA"))
+                        {
+                            animator.SetTrigger("Attack_AAA");
+                        }
+                        if(animator.GetCurrentAnimatorStateInfo(0).IsName("OS"))
+                        {
+                            animator.SetTrigger("Attack_SSA");
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
 
-            if (noOfClicks >= 2 && animator.GetCurrentAnimatorStateInfo(0).IsName("A"))
+            else
             {
-                animator.SetBool("Attack_A_1", false);
-                animator.SetBool("Attack_A_2", true);
-                isAttack = true;
-                canAttack = false;
-                if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
-                {
-                    canAttack = true;
-                }
-            }
-
-            if (noOfClicks >= 3 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && (animator.GetCurrentAnimatorStateInfo(0).IsName("OA") || animator.GetCurrentAnimatorStateInfo(0).IsName("OS")))
-            {
-                animator.SetBool("Attack_A_2", false);
-                animator.SetBool("Attack_S_2", false);
-                animator.SetBool("Attack_A_3", true);
-                isAttack = true;
+                animator.SetTrigger("Attack_A");
+                noOfClicks = 1;
             }
         }
     }
+
     public void OnAttackSButton(InputAction.CallbackContext context)
     {
-        if(canAttack)
+        noOfClicks++;
+        if (noOfClicks < 2)
         {
-            noOfClicks++;
-            if (noOfClicks == 1)
+            animator.SetTrigger("Attack_S");
+            isAttack = true;
+        }
+
+        else
+        {
+            if (canCombo)
             {
-                animator.SetBool("Attack_S_1", true);
-                isAttack = true;
-                canAttack = false;
-                if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
+                switch (noOfClicks)
                 {
-                    canAttack = true;
+                    case 2:
+                        animator.SetTrigger("Attack_SS");
+                        break;
+                    case 3:
+                        if (animator.GetCurrentAnimatorStateInfo(0).IsName("OS"))
+                        {
+                            animator.SetTrigger("Attack_SSS");
+                        }
+                        if (animator.GetCurrentAnimatorStateInfo(0).IsName("OA"))
+                        {
+                            animator.SetTrigger("Attack_AAS");
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
-            noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
-            if (noOfClicks >= 2 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.8f && animator.GetCurrentAnimatorStateInfo(0).IsName("S"))
-            {
-                animator.SetBool("Attack_S_1", false);
-                animator.SetBool("Attack_S_2", true);
-                isAttack = true;
-                canAttack= false;
-                if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
-                {
-                    canAttack = true;
-                }
-            }
 
-           if (noOfClicks >= 3 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && (animator.GetCurrentAnimatorStateInfo(0).IsName("OA") || animator.GetCurrentAnimatorStateInfo(0).IsName("OS")))
+            else
             {
-                animator.SetBool("Attack_A_2", false);
-                animator.SetBool("Attack_S_2", false);
-                animator.SetBool("Attack_S_3", true);
-                isAttack = true;
+                animator.SetTrigger("Attack_S");
+                noOfClicks = 1;
             }
         }
-    
     }
 
-    public void Attack()
-    {
-
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_A_1"))
-        {
-            animator.SetBool("Attack_A_1", false);
-        }
-        if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_S_1"))
-        {
-            animator.SetBool("Attack_S_1", false);
-        }
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_A_2"))
-        {
-            animator.SetBool("Attack_A_2", false);
-        }
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_S_2"))
-        {
-            animator.SetBool("Attack_S_2", false);
-        }
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_A_3"))
-        {
-            animator.SetBool("Attack_A_3", false);
-            noOfClicks = 0;
-        }
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_S_3"))
-        {
-            animator.SetBool("Attack_S_3", false);
-            noOfClicks = 0;
-        }
-        if (Time.time - lastClickedTime > maxComboDelay)
-        {
-            noOfClicks = 0;
-        }
-        if (Time.time > nextFireTime)
-        {
-            canAttack = true;
-        }
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-        {
-            attackCombo = 0;
-            noOfClicks = 0;
-            isAttack = false;
-            canAttack = true;
-            CapsuleCollider collider = gameObject.GetComponent<CapsuleCollider>();
-            collider.radius = 0.4f;
-            collider.center = new Vector3(0, 1, 0f);
-        }
-
-    }
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))

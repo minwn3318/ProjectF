@@ -79,6 +79,7 @@ public class PlayerController : MonoBehaviour
         {
             lastClickedTime = Time.time;
             noOfClicks++;
+            Debug.Log(noOfClicks);
 
             if (noOfClicks == 1)
             {
