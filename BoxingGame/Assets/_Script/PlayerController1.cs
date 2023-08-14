@@ -40,6 +40,8 @@ public class PlayerController1 : MonoBehaviour
 
     //공격중 판정 부울 변수 선언
     public bool isAttack = false;
+    //공격가능 판정 부울 변수 선언
+    public bool canAttack = true;
     //콤보가능 판정 부울 변수 선언
     public bool canCombo = false;
 
@@ -58,7 +60,6 @@ public class PlayerController1 : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
-        noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
     }
     private void FixedUpdate()
     {
@@ -96,8 +97,9 @@ public class PlayerController1 : MonoBehaviour
                 attackCombo = 0;
                 noOfClicks = 0;
                 isAttack = false;
+                canAttack = true;
                 canCombo = false;
-                //Debug.Log("combo : " + canCombo);
+                
                 CapsuleCollider collider = gameObject.GetComponent<CapsuleCollider>();
                 collider.radius = 0.4f;
                 collider.center = new Vector3(0, 1, 0f);
@@ -106,11 +108,11 @@ public class PlayerController1 : MonoBehaviour
 
         else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
         {
-            if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.8f)
+            if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.95f)
             {
                 canCombo = true;
-            }
-        }
+			}
+		}
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -119,46 +121,45 @@ public class PlayerController1 : MonoBehaviour
     }
     public void OnAttackAButton(InputAction.CallbackContext context)
     {
-        noOfClicks++;
-        Debug.Log(noOfClicks);
-        if(noOfClicks == 1)
-        {
-            animator.SetTrigger("Attack_A");
-            //Debug.Log("Attack A");
-            isAttack = true;
-        }
+		noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
 
-        else
+		if (canAttack)
         {
-            if(canCombo)
-            {
-                switch(noOfClicks)
-                {
-                    case 2:
-                        animator.SetTrigger("Attack_AA");
-                        //Debug.Log("Attack AA");
-                        break;
-                    case 3:
-                        if(animator.GetCurrentAnimatorStateInfo(0).IsName("OA"))
-                        {
-                            animator.SetTrigger("Attack_AAA");
-                        }
-                        if(animator.GetCurrentAnimatorStateInfo(0).IsName("OS"))
-                        {
-                            animator.SetTrigger("Attack_SSA");
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
+			animator.SetTrigger("Attack_A");
+			Debug.Log("Attack A");
 
-            else
+			isAttack = true;
+			canAttack = false;
+
+            noOfClicks++;
+		}
+        if(canCombo)
+        {
+            switch(noOfClicks)
             {
-                animator.SetTrigger("Attack_A");
-                noOfClicks = 1;
+                case 1:
+                    animator.SetTrigger("Attack_AA");
+                    Debug.Log("Attack AA");
+                    noOfClicks++;
+                    break;
+                case 2:
+                    if(animator.GetCurrentAnimatorStateInfo(0).IsName("OS"))
+                    {
+						animator.SetTrigger("Attack_SSA");
+                        Debug.Log("Attack SSA");
+					}
+                    else
+                    {
+                        animator.SetTrigger("Attack_AAA");
+                        Debug.Log("Attack AAA");
+                    }
+					break;
+                default:
+                    break;
             }
         }
+
+        Debug.Log("clicks : " + noOfClicks);
     }
 
     public void OnAttackSButton(InputAction.CallbackContext context)
@@ -170,36 +171,6 @@ public class PlayerController1 : MonoBehaviour
             isAttack = true;
         }
 
-        else
-        {
-            if (canCombo)
-            {
-                switch (noOfClicks)
-                {
-                    case 2:
-                        animator.SetTrigger("Attack_SS");
-                        break;
-                    case 3:
-                        if (animator.GetCurrentAnimatorStateInfo(0).IsName("OS"))
-                        {
-                            animator.SetTrigger("Attack_SSS");
-                        }
-                        if (animator.GetCurrentAnimatorStateInfo(0).IsName("OA"))
-                        {
-                            animator.SetTrigger("Attack_AAS");
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            else
-            {
-                animator.SetTrigger("Attack_S");
-                noOfClicks = 1;
-            }
-        }
     }
 
     private void OnCollisionStay(Collision collision)
