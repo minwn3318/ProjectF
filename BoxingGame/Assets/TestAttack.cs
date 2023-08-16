@@ -8,15 +8,28 @@ public class TestAttack : MonoBehaviour
     public Material test1;
     public Material test2;
 
-    public float HP;
+    public float HP = 100;
     private void Start()
     {
         defaultMaterial = GetComponent<MeshRenderer>();
+        HP = 100;
     }
     // Update is called once per frame
-    void Update()
+
+    void OnTriggerEnter(Collider other)
     {
-        
+        if (other.CompareTag("AttackCollider"))
+        {
+            Debug.Log("AttackCollider");
+            defaultMaterial.material = test2;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("AttackCollider"))
+        {
+            defaultMaterial.material = test1;
+        }
     }
 
 }

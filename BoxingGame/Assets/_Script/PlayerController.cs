@@ -8,17 +8,6 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance { get; private set; }
 
-
-    void Awake()
-    {
-        if (null == Instance)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            return;
-        }
-        Destroy(gameObject);
-    }
     Animator animator;
     Vector2 input;
     Vector3 moveVec;
@@ -36,7 +25,7 @@ public class PlayerController : MonoBehaviour
     float lastClickedTime = 0;
     float maxComboDelay = 1f;
 
-
+    public GameObject attackCollider;
     public float damage;
     void Start()
     {
@@ -48,11 +37,13 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
+        OnAttack();
         Move();
     }
     private void Move()
     {
-        if(!isAttack)
+        OnMove();
+        if (!isAttack)
         {
             moveVec = new Vector3(input.x, 0, input.y).normalized;
             isMove = moveVec.magnitude != 0;
@@ -69,14 +60,18 @@ public class PlayerController : MonoBehaviour
         }
         
     }
-    public void OnMove(InputAction.CallbackContext context)
+    public void OnMove()
     {
-        input = context.ReadValue<Vector2>();
+        input.x = Input.GetAxisRaw("Horizontal");
+        input.y = Input.GetAxisRaw("Vertical");
+
     }
-    public void OnAttackAButton(InputAction.CallbackContext context)
+    public void OnAttackAButton()
     {
+        
         if(canAttack)
         {
+            Debug.Log("A attack");
             lastClickedTime = Time.time;
             noOfClicks++;
 
@@ -84,6 +79,9 @@ public class PlayerController : MonoBehaviour
             {
                 animator.SetBool("Attack_A_1", true);
                 isAttack = true;
+                attackCollider.SetActive(true);
+
+
             }
             noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
             if (noOfClicks >= 2 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && (animator.GetCurrentAnimatorStateInfo(0).IsName("A") || animator.GetCurrentAnimatorStateInfo(0).IsName("S")))
@@ -93,6 +91,7 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("Attack_A_2", true);
 
                 isAttack = true;
+                attackCollider.SetActive(true);
             }
 
             if (noOfClicks >= 3 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && (animator.GetCurrentAnimatorStateInfo(0).IsName("OA") || animator.GetCurrentAnimatorStateInfo(0).IsName("OS")))
@@ -101,22 +100,26 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("Attack_S_2", false);
                 animator.SetBool("Attack_A_3", true);
                 isAttack = true;
+                attackCollider.SetActive(true);
 
 
             }
         }
       
     }
-    public void OnAttackSButton(InputAction.CallbackContext context)
+    public void OnAttackSButton()
     {
+
         if(canAttack)
         {
+            Debug.Log("S attack");
             lastClickedTime = Time.time;
             noOfClicks++;
             if (noOfClicks == 1)
             {
                 animator.SetBool("Attack_S_1", true);
                 isAttack = true;
+                attackCollider.SetActive(true);
             }
             noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
             if (noOfClicks >= 2 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && (animator.GetCurrentAnimatorStateInfo(0).IsName("A") || animator.GetCurrentAnimatorStateInfo(0).IsName("S")))
@@ -125,6 +128,7 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("Attack_S_1", false);
                 animator.SetBool("Attack_S_2", true);
                 isAttack = true;
+                attackCollider.SetActive(true);
             }
 
            if (noOfClicks >= 3 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && (animator.GetCurrentAnimatorStateInfo(0).IsName("OA") || animator.GetCurrentAnimatorStateInfo(0).IsName("OS")))
@@ -133,6 +137,7 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("Attack_S_2", false);
                 animator.SetBool("Attack_S_3", true);
                 isAttack = true;
+                attackCollider.SetActive(true);
             }
         }
     
@@ -144,27 +149,33 @@ public class PlayerController : MonoBehaviour
         if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_A_1"))
         {
             animator.SetBool("Attack_A_1", false);
+            attackCollider.SetActive(false);
         }
         if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_S_1"))
         {
             animator.SetBool("Attack_S_1", false);
+            attackCollider.SetActive(false);
         }
         if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_A_2"))
         {
             animator.SetBool("Attack_A_2", false);
+            attackCollider.SetActive(false);
         }
         if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_S_2"))
         {
             animator.SetBool("Attack_S_2", false);
+            attackCollider.SetActive(false);
         }
         if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_A_3"))
         {
             animator.SetBool("Attack_A_3", false);
+            attackCollider.SetActive(false);
             noOfClicks = 0;
         }
         if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_S_3"))
         {
             animator.SetBool("Attack_S_3", false);
+            attackCollider.SetActive(false);
             noOfClicks = 0;
         }
         if (Time.time - lastClickedTime > maxComboDelay)
@@ -179,11 +190,25 @@ public class PlayerController : MonoBehaviour
         {
             attackCombo = 0;
             isAttack = false;
+            attackCollider.SetActive(false);
             CapsuleCollider collider = gameObject.GetComponent<CapsuleCollider>();
             collider.radius = 0.4f;
             collider.center = new Vector3(0, 1, 0f);
         }
 
+    }
+    void OnAttack()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            Debug.Log("A press");
+            OnAttackAButton();
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            Debug.Log("S press");
+            OnAttackSButton();
+        }
     }
     private void OnCollisionStay(Collision collision)
     {
