@@ -179,7 +179,7 @@ Animator:
   m_GameObject: {fileID: 539491247289014569}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 78373fcb908686040a8b4e1c9179221a, type: 3}
-  m_Controller: {fileID: 9100000, guid: a44c2abbb81ce29459e7dd29e96bd951, type: 2}
+  m_Controller: {fileID: 9100000, guid: d14f3b06beb6fb541a534ffdba1dccde, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -234,10 +234,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   turnSmoothTime: 0.1
-  attackCombo: 0
   isAttack: 0
-  canAttack: 0
-  cooldownTime: 2
+  canAttack: 1
+  canCombo: 0
+  attackCombo: 0
   damage: 0
 --- !u!1 &591355474189133939
 GameObject:

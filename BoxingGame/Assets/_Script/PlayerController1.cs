@@ -127,7 +127,7 @@ public class PlayerController1 : MonoBehaviour
         }
 
         //조건이 기본상태가 아니고, 이동 상태도 아닐 때 작동(= 공격중일때)
-        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Run"))
+        else if (!(animator.GetCurrentAnimatorStateInfo(0).IsName("Run") && noOfClicks == 2))
         {
             //진행도가 0.5이상 되면 상태 변화(=콤보가능 상태 조작)
             if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f)
