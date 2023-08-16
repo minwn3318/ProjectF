@@ -71,6 +71,7 @@ public class PlayerController : MonoBehaviour
         
         if(canAttack)
         {
+            attackCollider.SetActive(true);
             Debug.Log("A attack");
             lastClickedTime = Time.time;
             noOfClicks++;

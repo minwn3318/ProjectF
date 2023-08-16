@@ -765,7 +765,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 1581530659}
-  HPSlider: {fileID: 0}
+  HPSlider: {fileID: 1180734870}
 --- !u!114 &1180734870
 MonoBehaviour:
   m_ObjectHideFlags: 0

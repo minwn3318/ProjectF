@@ -17,6 +17,7 @@ public class TestSlider : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(enemy.HP);
         HPSlider.value = enemy.HP / 100;
     }
 }

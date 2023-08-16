@@ -22,6 +22,7 @@ public class TestAttack : MonoBehaviour
         {
             Debug.Log("AttackCollider");
             defaultMaterial.material = test2;
+            HP -= 5;
         }
     }
     private void OnTriggerExit(Collider other)
