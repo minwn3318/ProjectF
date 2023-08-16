@@ -6,197 +6,55 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public static PlayerController Instance { get; private set; }
 
+
+    //애니메이션 컨트롤러 변수 선언
     Animator animator;
+
+    //이동관련 평면벡터 변수 선언
     Vector2 input;
+    //이동 중 회전관련 삼차원벡터 변수 선언
     Vector3 moveVec;
+
+    //이동속력 변수 선언
     [SerializeField] float speed;
+    //회전시간 변수 선언
     public float turnSmoothTime = 0.1f;
+    //회전속력 변수 선언
     private float turnSmoothVelocity;
+    //움직임 판정 부울 변수 선언
     private bool isMove;
-    public int attackCombo = 0;
-    public bool isAttack;
-    public bool canAttack;
 
-    public float cooldownTime = 2f;
-    private float nextFireTime = 0f;
-    public static int noOfClicks = 0;
-    float lastClickedTime = 0;
-    float maxComboDelay = 1f;
-
+    //공격중 판정 부울 변수 선언
+    public bool isAttack = false;
+    //공격가능 판정 부울 변수 선언
+    public bool canAttack = true;
+    //콤보가능 판정 부울 변수 선언
+    public bool canCombo = false;
+    //공격 범위
     public GameObject attackCollider;
+    //공격 콤보 변수 선언
+    public int attackCombo = 0;
+    //클릭 횟수 스테틱 변수 선언
+    public static int noOfClicks = 0;
+
     public float damage;
+
     void Start()
     {
+        //시작시 씬에 있는 애니메이터 가져오기
         animator = GetComponent<Animator>();
     }
     private void FixedUpdate()
     {
-        Attack();
+        //픽시드 업데이트시 상태 체크하기
+        Idle();
     }
     void Update()
     {
+        //업데이트시 이동 체크하기
         OnAttack();
         Move();
-    }
-    private void Move()
-    {
-        OnMove();
-        if (!isAttack)
-        {
-            moveVec = new Vector3(input.x, 0, input.y).normalized;
-            isMove = moveVec.magnitude != 0;
-            if (isMove)
-            {
-                float targetAngle = Mathf.Atan2(moveVec.x, moveVec.z) * Mathf.Rad2Deg;
-                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
-                transform.rotation = Quaternion.Euler(0f, angle, 0f);
-            }
-
-            transform.position += moveVec * speed * Time.deltaTime;
-
-            animator.SetBool("IsRun", isMove);
-        }
-        
-    }
-    public void OnMove()
-    {
-        input.x = Input.GetAxisRaw("Horizontal");
-        input.y = Input.GetAxisRaw("Vertical");
-
-    }
-    public void OnAttackAButton()
-    {
-        
-        if(canAttack)
-        {
-            attackCollider.SetActive(true);
-            Debug.Log("A attack");
-            lastClickedTime = Time.time;
-            noOfClicks++;
-
-            if (noOfClicks == 1)
-            {
-                animator.SetBool("Attack_A_1", true);
-                isAttack = true;
-                attackCollider.SetActive(true);
-
-
-            }
-            noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
-            if (noOfClicks >= 2 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && (animator.GetCurrentAnimatorStateInfo(0).IsName("A") || animator.GetCurrentAnimatorStateInfo(0).IsName("S")))
-            {
-                animator.SetBool("Attack_A_1", false);
-                animator.SetBool("Attack_S_1", false);
-                animator.SetBool("Attack_A_2", true);
-
-                isAttack = true;
-                attackCollider.SetActive(true);
-            }
-
-            if (noOfClicks >= 3 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && (animator.GetCurrentAnimatorStateInfo(0).IsName("OA") || animator.GetCurrentAnimatorStateInfo(0).IsName("OS")))
-            {
-                animator.SetBool("Attack_A_2", false);
-                animator.SetBool("Attack_S_2", false);
-                animator.SetBool("Attack_A_3", true);
-                isAttack = true;
-                attackCollider.SetActive(true);
-
-
-            }
-        }
-      
-    }
-    public void OnAttackSButton()
-    {
-
-        if(canAttack)
-        {
-            Debug.Log("S attack");
-            lastClickedTime = Time.time;
-            noOfClicks++;
-            if (noOfClicks == 1)
-            {
-                animator.SetBool("Attack_S_1", true);
-                isAttack = true;
-                attackCollider.SetActive(true);
-            }
-            noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
-            if (noOfClicks >= 2 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && (animator.GetCurrentAnimatorStateInfo(0).IsName("A") || animator.GetCurrentAnimatorStateInfo(0).IsName("S")))
-            {
-                animator.SetBool("Attack_A_1", false);
-                animator.SetBool("Attack_S_1", false);
-                animator.SetBool("Attack_S_2", true);
-                isAttack = true;
-                attackCollider.SetActive(true);
-            }
-
-           if (noOfClicks >= 3 && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && (animator.GetCurrentAnimatorStateInfo(0).IsName("OA") || animator.GetCurrentAnimatorStateInfo(0).IsName("OS")))
-            {
-                animator.SetBool("Attack_A_2", false);
-                animator.SetBool("Attack_S_2", false);
-                animator.SetBool("Attack_S_3", true);
-                isAttack = true;
-                attackCollider.SetActive(true);
-            }
-        }
-    
-    }
-
-    public void Attack()
-    {
-
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_A_1"))
-        {
-            animator.SetBool("Attack_A_1", false);
-            attackCollider.SetActive(false);
-        }
-        if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_S_1"))
-        {
-            animator.SetBool("Attack_S_1", false);
-            attackCollider.SetActive(false);
-        }
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_A_2"))
-        {
-            animator.SetBool("Attack_A_2", false);
-            attackCollider.SetActive(false);
-        }
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_S_2"))
-        {
-            animator.SetBool("Attack_S_2", false);
-            attackCollider.SetActive(false);
-        }
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_A_3"))
-        {
-            animator.SetBool("Attack_A_3", false);
-            attackCollider.SetActive(false);
-            noOfClicks = 0;
-        }
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f && animator.GetBool("Attack_S_3"))
-        {
-            animator.SetBool("Attack_S_3", false);
-            attackCollider.SetActive(false);
-            noOfClicks = 0;
-        }
-        if (Time.time - lastClickedTime > maxComboDelay)
-        {
-            noOfClicks = 0;
-        }
-        if (Time.time > nextFireTime)
-        {
-            canAttack = true;
-        }
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-        {
-            attackCombo = 0;
-            isAttack = false;
-            attackCollider.SetActive(false);
-            CapsuleCollider collider = gameObject.GetComponent<CapsuleCollider>();
-            collider.radius = 0.4f;
-            collider.center = new Vector3(0, 1, 0f);
-        }
-
     }
     void OnAttack()
     {
@@ -211,6 +69,213 @@ public class PlayerController : MonoBehaviour
             OnAttackSButton();
         }
     }
+    //이동 함수
+    private void Move()
+    {
+        OnMove();
+        //공격상태가 아닐 시 이동
+        if (!isAttack)
+        {
+            //캐릭터의 벡터 구하기
+            //이동 판정 부울 값이 참일 시 움직임 시작
+            if (isMove)
+            {
+                //보는 방향 앵글 XZ 값
+                float targetAngle = Mathf.Atan2(moveVec.x, moveVec.z) * Mathf.Rad2Deg;
+                //부드러운 움직임 유도식
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+                //회전 바꾸기
+                transform.rotation = Quaternion.Euler(0f, angle, 0f);
+            }
+
+            //이동하기
+            transform.position += moveVec * speed * Time.deltaTime;
+
+        }
+        Debug.Log(isMove);
+        //움직임 애니메이션 작동
+        animator.SetBool("IsRun", isMove);
+    }
+
+    //상태체크 함수
+    public void Idle()
+    {
+        //조건이 기본상태일 때 작동
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        {
+            //진행도가 0.2보다 작을 시 상태 변화(= 기본상태로 전환)
+            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.2f)
+            {
+                attackCombo = 0;
+
+                //클릭횟수 초기화
+                noOfClicks = 0;
+                //공격중 상태 거짓
+                isAttack = false;
+                //공격 가능 상태 참
+                canAttack = true;
+                //콤보 가능 상태 거짓
+                canCombo = false;
+                
+                //콜라이더 선언
+                CapsuleCollider collider = gameObject.GetComponent<CapsuleCollider>();
+                //콜라이더 반지름
+                collider.radius = 0.4f;
+                //콜라이더 중심
+                collider.center = new Vector3(0, 1, 0f);
+            }
+        }
+
+        //조건이 기본상태가 아니고, 이동 상태도 아닐 때 작동(= 공격중일때)
+        else if (!(animator.GetCurrentAnimatorStateInfo(0).IsName("Run") && noOfClicks == 2))
+        {
+            //진행도가 0.5이상 되면 상태 변화(=콤보가능 상태 조작)
+            if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f)
+            {
+                //콤보가능 상태 참
+                canCombo = true;
+
+                //진행도가 0.7이상 되면 상태 변화(= 콤보가능 상태 불가로 조작)
+                if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
+                {
+                    //콤보 가능 상태 거짓
+                    canCombo = false;
+                    attackCollider.SetActive(false);
+                }
+			}
+		}
+    }
+
+    //이동 인풋시스템 적용함수
+    public void OnMove()
+    {
+        input.x = Input.GetAxisRaw("Horizontal");
+        input.y = Input.GetAxisRaw("Vertical");
+        moveVec = new Vector3(input.x, 0, input.y).normalized;
+        //이동 판정 부울 값 구하기
+        isMove = moveVec.magnitude != 0;
+    }
+
+    //A공격 함수
+    public void OnAttackAButton()
+    {
+        //클릿횟수 범위 제한
+		noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
+
+        //공격가능 상태일 시 작동(=기본 상태일때 버튼 누를 시 작동)
+		if (canAttack)
+        {
+            attackCollider.SetActive(true);
+            //기본 A공격 애니메이션 작동
+            animator.SetTrigger("Attack_A");
+            //공격중 상태 참
+			isAttack = true;
+            //공격가능 상태 거짓(=기본상태가 아님을 의미함)
+			canAttack = false;
+            //클릭횟수 증가
+            noOfClicks++;
+		}
+        //콤보가능 상태일 시 작동(=기본 공격을 하고 난후 일정 타이밍 때 버튼 누를 시 작동)
+        if(canCombo)
+        {
+            //콤보가능 상태 거짓(버튼을 연속으로 눌러 트리거가 또 켜지는 현상 방지)
+            canCombo = false;
+
+            //클릭 횟수에 따른 공격 모션 분기
+            switch (noOfClicks)
+            {
+                //클릭횟수가 1번이었다면 작동
+                case 1:
+                    //현재 누적 클릭횟수가 1이고, 작동되는 애니메이션이 A일때 버튼을 눌렀다면 AA진행
+                    if(animator.GetCurrentAnimatorStateInfo(0).IsName("A"))
+                    {
+                        animator.SetTrigger("Attack_AA");
+                        attackCollider.SetActive(true);
+                        //클릭횟수 증가
+                        noOfClicks++;
+                    }
+                    break;
+                //클릭횟수가 2번이었다면 분기가 갈라짐
+                case 2:
+                    //현재 누적 클릭횟수가 2이고, 작동되는 애니메이션이 OA일 때 버튼을 눌렀다면 SSA진행
+                    if(animator.GetCurrentAnimatorStateInfo(0).IsName("OA"))
+                    {
+						animator.SetTrigger("Attack_AAA");
+                        attackCollider.SetActive(true);
+                    }
+                    //현재 누적 클릭횟수가 2이고, 작동되는 애니메이션이 OS일때 버튼을 눌렀다면 AAA진행
+                    else if(animator.GetCurrentAnimatorStateInfo(0).IsName("OS"))
+                    {
+                        animator.SetTrigger("Attack_SSA");
+                        attackCollider.SetActive(true);
+                    }
+					break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    //S 공격함수
+    public void OnAttackSButton()
+    {
+        //클릭횟수 범위 제한
+        noOfClicks = Mathf.Clamp(noOfClicks, 0, 3);
+
+        //공격가능 상태일 시 작동(=기본 상태일때 버튼 누를 시 작동)
+        if (canAttack)
+        {
+            attackCollider.SetActive(true);
+            //기본 A공격 애니메이션 작동
+            animator.SetTrigger("Attack_S");
+            //공격중 상태 참
+            isAttack = true;
+            //공격가능 상태 거짓(=기본상태가 아님을 의미함)
+            canAttack = false;
+            //클릭횟수 증가
+            noOfClicks++;
+        }
+        //콤보가능 상태일 시 작동(=기본 공격을 하고 난후 일정 타이밍 때 버튼 누를 시 작동)
+        if (canCombo)
+        {
+            //콤보가능 상태 거짓(버튼을 연속으로 눌러 트리거가 또 켜지는 현상 방지)
+            canCombo = false;
+
+            //클릭 횟수에 따른 공격 모션 분기
+            switch (noOfClicks)
+            {
+                //클릭횟수가 1번이었다면 SS공격 작동
+                case 1:
+                    //현재 누적 클릭횟수가 1이고, 작동되는 애니메이션이 S일때 버튼을 눌렀다면 SS진행
+                    if (animator.GetCurrentAnimatorStateInfo(0).IsName("S"))
+                    {
+                        animator.SetTrigger("Attack_SS");
+                        attackCollider.SetActive(true);
+                        //클릭횟수 증가
+                        noOfClicks++;
+                    }
+                    break;
+                //클릭횟수가 2번이었다면 분기가 갈라짐
+                case 2:
+                    //현재 누적 클릭횟수가 2이고, 작동되는 애니메이션이 OS일 때 버튼을 눌렀다면 SSS진행
+                    if (animator.GetCurrentAnimatorStateInfo(0).IsName("OS"))
+                    {
+                        animator.SetTrigger("Attack_SSS");
+                        attackCollider.SetActive(true);
+                    }
+                    //현재 누적 클릭횟수가 2이고, 작동되는 애니메이션이 OA일때 버튼을 눌렀다면 AAS진행
+                    else if(animator.GetCurrentAnimatorStateInfo(0).IsName("OA"))
+                    {
+                        animator.SetTrigger("Attack_AAS");
+                        attackCollider.SetActive(true);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -219,6 +284,7 @@ public class PlayerController : MonoBehaviour
 
             if (controller.AttackCheck())
             {
+
             }
         }
     }
